@@ -1,51 +1,52 @@
-#include <stdarg.h>
-#include <stdio.h>
-#include <unistd.h>
 #include "main.h"
+#include <stdarg.h>
+#include <stdlib.h>
+#include <unistd.h>
 /**
- * _printf - Fonction personnalisée pour afficher des sorties formatées
- * @format: Chaîne de format spécifiant le texte à écrire et les arguments
- * 
- * Retourne: Nombre total de caractères écrits ou -1 en cas d'erreur
+ * _printf - affiche une chaine de caractères, dont si elle en contient:
+ * une fonction retournant un caractère, une chaine,
+ * un nombre entier ou une décimal
+ *
+ * @format: la chaine de caractères à traiter
+ * Return: nombres de caractères
  */
 int _printf(const char *format, ...)
 {
-	int qui_parcours_format = 0;
-	int qui_parcours_spe = 0;
-	int compteur = 0;
-specificateur_t spe[] = {
-	{'c', print_char},
-	{'s', print_string},
-	{'%', print_percent},
-	{'d', print_decimal},
-	{'i', print_integer},
-	{'\0', NULL} /* Marque la fin du tableau */
+va_list arguments;
+int compteur;
+int compteur2;
+int longueur = 0;
+
+CaractereSpeciale Speciale[] = {
+{'c', afficher_caractere},
+{'s', afficher_chaine},
+{'%', afficher_pourcentage},
+{'d', afficher_decimal},
+{'i', afficher_entier},
 };
-va_list arguments1;
-va_start(arguments1, format); /* Initialiser la liste d'arguments */
-if (format == NULL) /* Si format est null */
-return (-1); /* Signale une erreur */
-for (qui_parcours_format = 0; format[qui_parcours_format] != '\0'; qui_parcours_format++)
+
+va_start(arguments, format);
+if (format == NULL)
+return (-1);
+for (compteur = 0; format[compteur] != '\0'; compteur++)
 {
-if (format[qui_parcours_format] == '%') /* Si après avoir parcouru on trouve '%' */
+if (format[compteur] == '%')
 {
-qui_parcours_format++; /* On poursuit au prochain caractère */
-if (format[qui_parcours_format] == '\0') /* Si % est le dernier élément */
-return (-1); /* Renvoie une erreur */
-for (qui_parcours_spe = 0; spe[qui_parcours_spe].specificateur != '\0'; qui_parcours_spe++) /* On passe à spe */
+compteur++;
+for (compteur2 = 0; Speciale[compteur2].lettreachanger != '\0'; compteur2++)
 {
-if (format[qui_parcours_format] == spe[qui_parcours_spe].specificateur)
+if (format[compteur] == Speciale[compteur2].lettreachanger)
 {
-compteur += spe[qui_parcours_spe].pointeurdefonction(arguments1);
+longueur += Speciale[compteur2].pointeurdefonction(arguments);
 }
 }
 }
 else
 {
-write(1, &format[qui_parcours_format], 1);
-compteur++;
+write(1, &format[compteur], 1);
+longueur++;
 }
 }
-va_end(arguments1);
-return (compteur);
+va_end(arguments);
+return (longueur);
 }

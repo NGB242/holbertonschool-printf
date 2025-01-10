@@ -1,86 +1,130 @@
-#include "main.h"
-#include <string.h>  
+#include <stdarg.h>
+#include <unistd.h>
+#include <stdio.h>
+
 /**
- * print_char - Imprime un caractère
- * @args: Liste des arguments de type va_list
- * 
- * Return: Nombre de caractères imprimés
+ * afficher_caractere - affiche un caractère
+ * @arguments: argument à convertir et afficher
+ * Return: longueur
  */
-int print_char(va_list args)
+int afficher_caractere(va_list arguments)
 {
-    char c = va_arg(args, int);
-    return write(1, &c, 1);
-}
-int print_string(va_list args)
-/**
- * print_string - Imprime une chaîne de caractères
- * @args: Liste des arguments de type va_list
- * 
- * Return: Nombre de caractères imprimés
- */
-{
-	char *str = va_arg(args, char *);
-    int compteur = 0;
-    if (!str)
-    str = "(null)";
-    while (*str)
-{
-    write(1, str++, 1);
-    compteur++;
-}
-    return compteur;
-}
-int print_percent(va_list args)
-/**
- * print_percent - Imprime un caractère de pourcentage
- * @args: Liste des arguments de type va_list (non utilisé)
- * 
- * Return: Nombre de caractères imprimés
- */
-{
-    (void)args; 
-    return write(1, "%", 1);
-}
-int print_decimal(va_list args)
-/**
- * print_decimal - Imprime un entier
- * @args: Liste des arguments de type va_list
- * 
- * Return: Nombre de caractères imprimés
- */
-{
-    int n = va_arg(args, int);  
-    int count = 0;
-    char buffer[12];  
-    int i = 0;
-	
-	if (n < 0) {
-        _putchar('-');
-        count++;
-        n = -n; 
-    }
-	if (n == 0) {
-        buffer[i++] = '0';
-    } else 
-	{
-		while (n > 0) {
-            buffer[i++] = (n % 10) + '0'; 
-            n /= 10;  
-        }
-    }
-    while (i > 0) {
-        _putchar(buffer[--i]);
-        count++;
-    }
-    return count;
+char caractere = va_arg(arguments, int);
+write(1, &caractere, 1);
+return (1);
 }
 /**
- * print_integer - Imprime un entier (identique à print_decimal)
- * @args: Liste des arguments de type va_list
- * 
- * Return: Nombre de caractères imprimés
+ * afficher_chaine - affiche une chaine de caractères
+ * @arguments: argument à convertir et afficher
+ * Return: longueur
  */
-int print_integer(va_list args)
+int afficher_chaine(va_list arguments)
 {
-    return print_decimal(args); 
+char *chaine = va_arg(arguments, char *);
+int longueur = 0;
+while (*chaine != '\0')
+{
+write(1, chaine, 1);
+chaine++;
+longueur++;
 }
+return (longueur);
+}
+/**
+ * afficher_pourcentage - affiche un %
+ * @arguments: argument à convertir et afficher
+ * Return: 1, %
+ */
+int afficher_pourcentage(va_list arguments)
+{
+char pourcentage = '%';
+(void)arguments;
+write(1, &pourcentage, 1);
+return (1);
+}
+/**
+ * afficher_entier - affiche un nombre entier
+ * @arguments: argument à convertir et afficher
+ * Return: longueur
+ */
+int afficher_entier(va_list arguments)
+{
+int num = va_arg(arguments, int);
+char tampon[20];
+int longueur = 0;
+int compteur;
+if (num == 0)
+{
+write(1, "0", 1);
+return (0);
+}
+if (num < 0)
+{
+write(1, "-", 1);
+num = -num;
+}
+while (num > 0)
+{
+tampon[longueur++] = (num % 10) + '0';
+num /= 10;
+}
+for (compteur = longueur - 1; compteur >= 0; compteur--)
+{
+write(1, &tampon[compteur], 1);
+}
+return (longueur);
+}
+
+/**
+ * afficher_decimal - affiche un nombre décimal
+ * @arguments: argument à convertir et afficher
+ * Return: longueur
+ */
+int afficher_decimal(va_list arguments)
+{
+double nombre = va_arg(arguments, double);
+int partie_entier = (int)nombre;
+double partie_decimale = nombre - partie_entier;
+
+int longueur = 0;
+int stock_entier;
+int compteur;
+char espace[50];
+int chiffre;
+
+stock_entier = partie_entier;
+if (partie_entier == 0)
+{
+write(1, "0", 1);
+longueur++;
+}
+else
+{
+while (stock_entier > 0)
+{
+stock_entier /= 10;
+longueur++;
+}
+for (compteur = longueur - 1; compteur >= 0; compteur--)
+{
+espace[compteur] = (partie_entier % 10) + '0';
+partie_entier /= 10;
+}
+write(1, espace, longueur);
+}
+if (partie_decimale > 0)
+{
+write(1, ".", 1);
+for (compteur = 0; compteur < 6; compteur++)
+{
+partie_decimale *= 10;
+chiffre = (int)partie_decimale;
+espace[0] = chiffre + '0';
+write(1, &espace[0], 1);
+partie_decimale -= chiffre;
+}
+}
+return (longueur + 7);
+
+}
+

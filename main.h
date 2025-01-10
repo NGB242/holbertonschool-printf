@@ -1,18 +1,23 @@
-#ifndef MAIN_H
-#define MAIN_H
+#ifndef _MAIN_H_
+#define _MAIN_H_
 #include <stdarg.h>
-#include <stdlib.h>
-#include <unistd.h>
-typedef struct specificateur
-{
-char specificateur;
-int (*pointeurdefonction)(va_list);
-} specificateur_t;
 int _printf(const char *format, ...);
-int print_char(va_list args);
-int print_string(va_list args);
-int print_percent(va_list args);
-int print_integer(va_list args);
-int print_decimal(va_list args);
-int _putchar(char c);
+int afficher_caractere(va_list arguments);
+int afficher_chaine(va_list arguments);
+int afficher_pourcentage(va_list arguments);
+int afficher_decimal(va_list arguments);
+int afficher_entier(va_list arguments);
+/**
+ * struct CaractereSpeciale - structure pour associer
+ * un caractere special à une fonction
+ * @lettreachanger: le caractere special (ex. 'c', 's', '%', etc.)
+ * @pointeurdefonction: un pointeur vers la fonction qui gere,
+ * ce caractere special
+ */
+typedef struct CaractereSpeciale
+{
+char lettreachanger;
+int (*pointeurdefonction)(va_list arguments);
+}
+CaractereSpeciale;
 #endif
