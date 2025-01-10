@@ -2,6 +2,7 @@
 #include <stdarg.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include "main.h"
 /**
  * _printf - affiche une chaine de caractères, dont si elle en contient:
  * une fonction retournant un caractère, une chaine,
