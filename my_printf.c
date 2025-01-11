@@ -21,16 +21,13 @@ char *str;
 va_start(args, format);
 while (format && format[i])
 {
-if (format[i] == '%' && format[i + 1] == 'r')
+if (format[i] == '%' && format[i + 1] == 's')
 {
 str = va_arg(args, char *);
-if (str)
-{
-int len = strlen(str);
-while (len--)
-write(1, &str[len], 1);
+if (str == NULL)
+str = "(null)";
+write(1, str, strlen(str));
 count += strlen(str);
-}
 i += 2;
 }
 else
