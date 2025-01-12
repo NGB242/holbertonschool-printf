@@ -1,0 +1,49 @@
+.SH NAME
+.B _printf
+
+.SH SYNOPSIS
+.B #include "main.h"
+.br
+.B int_printf(const char *format, ...);
+
+.SH  DESCRIPTION
+
+The _printf function produces output according to the format in the standard output
+
+.br
+%c: Prints a single character.
+.br
+%s: Prints a string of characters.
+.br
+%% : Print a percent character
+.br
+%d: Prints integers in decimal base
+.br
+%i: Prints integers in decimal base
+.br
+%u: Prints unsigned integers
+.br
+
+.SH RETURN
+In the case of a successful return the number of characters printed (excluding the null byte used to end output to strings)
+write output to stdout, the standard output stream. On error (for example, if the format parameter is NULL), returns -1.
+.br
+
+.SH EXAMPLE
+.br
+.SS
+.BI Print integer (Decimal base) and String
+#include "main.h"
+_printf("In that simple _printf we gonna %s %d words", "print", 8);
+.nf
+Output : "In that simple _printf we gonna print 8 words"
+
+.br
+.SS
+.BI Print percent sign
+#include "main.h"
+_printf("Printing the percent sign : %%\n");
+.nf
+Output : "Printing the percent sign : %"
+
+.Br
